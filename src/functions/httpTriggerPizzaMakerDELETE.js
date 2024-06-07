@@ -8,8 +8,8 @@ const defaultPost = {
 
 /*
 const cosmosInput = input.cosmosDB({
-    databaseName: 'databaseName',
-    containerName: 'containerName',
+    databaseName: 'PizzaMaker',
+    containerName: 'PizzaCreations',
     connection: 'CosmosDB',
     sqlQuery: "select * from c"
 });
