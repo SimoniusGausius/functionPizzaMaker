@@ -1,27 +1,26 @@
-//geht nicht
+const { app,output } = require('@azure/functions');
 
-const { app,input } = require('@azure/functions');
-
-const cosmosInput = input.cosmosDB({
+const cosmosOutput = output.cosmosDB({
     databaseName: 'PizzaMaker',
     containerName: 'PizzaCreations',
     connection: 'CosmosDB',
-    sqlQuery: "select * from c"
+    createIfNotExists: true
 });
 
-app.http('pizzaMakerTriggerPOST', {
+app.http('httpTriggerPizzaMakerPOST', {
     methods: ['POST'],
     authLevel: 'anonymous',
-    extraInputs: [cosmosInput],
+    extraInputs: [cosmosOutput],
     route: 'items',
     handler: async (request, context) => {
-        context.log(`Http function processed request for url "${request.url}"`);
 
-        defaultPost.pizzaName = "keine Ahnung";
-        defaultPost.zutaten = "Teig, Tomatensauce, Mozarella"
+        const pizzaPost = await request.json();
 
-        const data = request.query.post(defaultPost);
+        context.extraOutputs.set(cosmosOutput, pizzaPost)
 
-        return data;
+        return {
+            body: JSON.stringify(pizzaPost),
+            status: 201
+        }
     }
 });

@@ -15,7 +15,7 @@ const cosmosInput = input.cosmosDB({
     sqlQuery: "select * from c"
 });
 
-app.http('pizzaMakerTriggerDELETE', {
+app.http('httpTriggerPizzaMakerDelete', {
     methods: ['DELETE'],
     authLevel: 'anonymous',
     extraInputs: [cosmosInput],

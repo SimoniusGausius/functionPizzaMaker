@@ -7,17 +7,17 @@ const cosmosInput = input.cosmosDB({
     sqlQuery: "select * from c"
 });
 
-app.http('pizzaMakerTriggerGET', {
+app.http('httpTriggerPizzaMakerGET', {
     methods: ['GET'],
     authLevel: 'anonymous',
     extraInputs: [cosmosInput],
     route: 'items',
     handler: async (request, context) => {
 
-        const defaultPost = context.extraInputs.get(cosmosInput);
+        const pizzaPost = context.extraInputs.get(cosmosInput);
 
         return { 
-            body: JSON.stringify(defaultPost),
+            body: JSON.stringify(pizzaPost),
             status: 200
         }
     }
