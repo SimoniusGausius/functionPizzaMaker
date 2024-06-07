@@ -1,11 +1,4 @@
-const { app } = require('@azure/functions');
-
-const defaultPost = {
-    id: 0,
-    pizzaName: "",
-    zutaten: "",
-    rating: 0
-}
+const { app,input } = require('@azure/functions');
 
 const cosmosInput = input.cosmosDB({
     databaseName: 'PizzaMaker',
@@ -15,16 +8,17 @@ const cosmosInput = input.cosmosDB({
 });
 
 app.http('pizzaMakerTriggerGET', {
-    methods: ['GET', 'POST'],
+    methods: ['GET'],
     authLevel: 'anonymous',
+    extraInputs: [cosmosInput],
+    route: 'items',
     handler: async (request, context) => {
-        context.log(`Http function processed request for url "${request.url}"`);
 
-        defaultPost.id = request.query.get('id') || await request.text() || 0;
-        defaultPost.pizzaName = request.query.get('pizzaName') || await request.text() || 'keine Ahnung';
-        defaultPost.zutaten = request.query.get('zutaten') || await request.text() || 'nichts';
-        defaultPost.rating = request.query.get('rating') || await request.text() || 0;
+        const defaultPost = context.extraInputs.get(cosmosInput);
 
-        return { body: `Eine Pizza ${defaultPost.pizzaName} mit ${defaultPost.zutaten}! Bewertung: ${defaultPost.rating} Sterne` };
+        return { 
+            body: JSON.stringify(defaultPost),
+            status: 200
+        }
     }
 });

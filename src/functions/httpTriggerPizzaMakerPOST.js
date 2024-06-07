@@ -1,3 +1,5 @@
+//geht nicht
+
 const { app } = require('@azure/functions');
 
 const defaultPost = {
@@ -6,14 +8,12 @@ const defaultPost = {
     rating: 0
 }
 
-/*
 const cosmosInput = input.cosmosDB({
     databaseName: 'PizzaMaker',
     containerName: 'PizzaCreations',
     connection: 'CosmosDB',
     sqlQuery: "select * from c"
 });
-*/
 
 app.http('pizzaMakerTriggerPOST', {
     methods: ['POST'],
