@@ -1,12 +1,6 @@
 //geht nicht
 
-const { app } = require('@azure/functions');
-
-const defaultPost = {
-    pizzaName: "",
-    zutaten: "",
-    rating: 0
-}
+const { app,input } = require('@azure/functions');
 
 const cosmosInput = input.cosmosDB({
     databaseName: 'PizzaMaker',
@@ -18,6 +12,8 @@ const cosmosInput = input.cosmosDB({
 app.http('pizzaMakerTriggerPOST', {
     methods: ['POST'],
     authLevel: 'anonymous',
+    extraInputs: [cosmosInput],
+    route: 'items',
     handler: async (request, context) => {
         context.log(`Http function processed request for url "${request.url}"`);
 
