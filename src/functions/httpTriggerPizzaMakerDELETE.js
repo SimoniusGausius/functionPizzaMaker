@@ -1,28 +1,31 @@
-//funktioniert nicht
+const { app } = require("@azure/functions");
+const { CosmosClient } = require("@azure/cosmos");
 
-const { app,output } = require('@azure/functions');
+const endpoint = "[YOUR ENDPOINT]";
+const key =
+  "[YOUR KEY]";
 
-const cosmosOutput = output.cosmosDB({
-    databaseName: 'PizzaMaker',
-    containerName: 'PizzaCreations',
-    connection: 'CosmosDB',
-    createIfNotExists: true
-});
+const client = new CosmosClient({ endpoint, key });
 
-app.http('httpTriggerPizzaMakerPOST', {
-    methods: ['POST'],
-    authLevel: 'anonymous',
-    extraInputs: [cosmosOutput],
-    route: 'items',
+const databaseId = "PizzaMaker";
+const containerId = "PizzaCreations";
+
+app.http("httpTriggerPizzaMakerPOST", {
+    methods: ["DELETE"],
+    authLevel: "anonymous",
+    route: "items/{id}",
     handler: async (request, context) => {
-
-        const pizzaPost = await request.json();
-
-        context.extraOutputs.set(cosmosOutput, pizzaPost)
-
-        return {
-            body: JSON.stringify(pizzaPost),
-            status: 201
-        }
-    }
-});
+      const database = client.database(databaseId);
+      const container = database.container(containerId);
+  
+      const itemId = request.params.id;
+  
+      const { resource: deletedItem } = await container.item(itemId).delete();
+      // Falls die obere Zeile nicht funktioniert, bitte die untenstehende kommentierte Zeile brauchen
+      // const { resource: deletedItem } = await container.item(itemId, itemId).delete();
+      return {
+        body: JSON.stringify(deletedItem),
+        status: 200,
+      };
+    },
+  });
