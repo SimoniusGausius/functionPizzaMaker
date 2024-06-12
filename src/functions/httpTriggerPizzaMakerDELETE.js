@@ -1,16 +1,15 @@
 const { app } = require("@azure/functions");
 const { CosmosClient } = require("@azure/cosmos");
 
-const endpoint = "[YOUR ENDPOINT]";
-const key =
-  "[YOUR KEY]";
+const endpoint = "https://pizzamaker.documents.azure.com:443/";
+const key = "vVaKKGYBYesw5L3yZrqw2Zr8ZRfzeVoH9MGVnkOGaXGGI8Qd5f5sIzyHeigW28QQA6ax2b6wuvTVACDbmzXEAg==";
 
 const client = new CosmosClient({ endpoint, key });
 
 const databaseId = "PizzaMaker";
 const containerId = "PizzaCreations";
 
-app.http("httpTriggerPizzaMakerPOST", {
+app.http("httpTriggerPizzaMakerDELETE", {
     methods: ["DELETE"],
     authLevel: "anonymous",
     route: "items/{id}",
@@ -27,5 +26,5 @@ app.http("httpTriggerPizzaMakerPOST", {
         body: JSON.stringify(deletedItem),
         status: 200,
       };
-    },
-  });
+  },
+});
