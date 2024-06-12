@@ -10,7 +10,7 @@ const cosmosOutput = output.cosmosDB({
 app.http('httpTriggerPizzaMakerPOST', {
     methods: ['POST'],
     authLevel: 'anonymous',
-    extraInputs: [cosmosOutput],
+    extraOutputs: [cosmosOutput],
     route: 'items',
     handler: async (request, context) => {
 
