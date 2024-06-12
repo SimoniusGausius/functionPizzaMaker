@@ -15,7 +15,7 @@ app.http('httpTriggerPizzaMakerPOST', {
     handler: async (request, context) => {
 
         const pizzaPost = await request.json();
-        data.id = (Math.random() + 1).toString(36);
+        pizzaPost.id = (Math.random() + 1).toString(36);
         context.extraOutputs.set(cosmosOutput, pizzaPost)
 
         return {
