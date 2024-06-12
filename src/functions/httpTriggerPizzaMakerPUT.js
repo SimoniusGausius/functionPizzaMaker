@@ -1,36 +1,35 @@
 const { app, output, input } = require("@azure/functions");
 
 const cosmosInput = input.cosmosDB({
-    databaseName: "PizzaMaker",
-    containerName: "PizzaCreations",
-    connection: "CosmosDB",
-    sqlQuery: "select * from c where c.id = {id}",
+  databaseName: "PizzaMaker",
+  containerName: "PizzaCreations",
+  connection: "CosmosDB",
+  sqlQuery: "select * from c where c.id = {id}",
   });  
 
 const cosmosOutput = output.cosmosDB({
-    databaseName: 'PizzaMaker',
-    containerName: 'PizzaCreations',
-    connection: 'CosmosDB',
-    createIfNotExists: true
+  databaseName: 'PizzaMaker',
+  containerName: 'PizzaCreations',
+  connection: 'CosmosDB',
+  createIfNotExists: true
 });
 
-app.http("httpTriggerPizzaMakerPOST", {
-    methods: ["PUT"],
-    authLevel: "anonymous",
-    extraInputs: [cosmosInput],
-    extraOutputs: [cosmosOutput],
-    route: "items/{id}",
-    handler: async (request, context) => {
-      const item = context.extraInputs.get(cosmosInput);
-      const data = await request.json();
-      console.log("UPDATE", data);
+app.http("httpTriggerPizzaMakerPUT", {
+  methods: ["PUT"],
+  authLevel: "anonymous",
+  extraInputs: [cosmosInput],
+  extraOutputs: [cosmosOutput],
+  route: "items/{id}",
+  handler: async (request, context) => {
+    const item = context.extraInputs.get(cosmosInput);
+    const data = await request.json();
       data.id = item[0].id;
   
-      context.extraOutputs.set(cosmosOutput, data);
+    context.extraOutputs.set(cosmosOutput, data);
   
-      return {
-        body: JSON.stringify(data),
-        status: 200,
-      };
-    },
+    return {
+      body: JSON.stringify(data),
+      status: 200,
+    };
+  },
 });
