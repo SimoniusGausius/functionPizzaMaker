@@ -19,9 +19,9 @@ app.http("httpTriggerPizzaMakerDELETE", {
   
       const itemId = request.params.id;
   
-      const { resource: deletedItem } = await container.item(itemId).delete();
+      //const { resource: deletedItem } = await container.item(itemId).delete();
       // Falls die obere Zeile nicht funktioniert, bitte die untenstehende kommentierte Zeile brauchen
-      // const { resource: deletedItem } = await container.item(itemId, itemId).delete();
+      const { resource: deletedItem } = await container.item(itemId, itemId).delete();
       return {
         body: JSON.stringify(deletedItem),
         status: 200,
